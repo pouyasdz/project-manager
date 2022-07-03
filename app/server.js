@@ -1,6 +1,6 @@
 module.exports = class Application {
-    #express = require('express')();
-    #app = this.#express
+    #express = require('express');
+    #app = this.#express()
     constructor(PORT, DB_URL){
         this.configDatabase(DB_URL)
         this.configApplication()
@@ -11,7 +11,7 @@ module.exports = class Application {
     configApplication(){
         const path = require('path')
         this.#app.use(this.#express.json());
-        this.#app.use(this.#express.urlencoded({extends:true}))
+        this.#app.use(this.#express.urlencoded({extended:true}))
         this.#app.use(this.#express.static(path.join(__dirname, "..", "public")))
     }
 
