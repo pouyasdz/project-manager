@@ -41,7 +41,7 @@ module.exports = class Application {
                 message:'صفحه یا ادرس مورد نظر یافت نشد'
             })
         })
-        this.#app.use((req, res, next)=>{
+        this.#app.use((error, req, res, next)=>{
             const status = error?.status || 500;
             const message = error?.message || "Internal ServerError";
             return res.status(status).json({

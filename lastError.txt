@@ -1,0 +1,9 @@
+throw error in code
+error name [object object]
+result => در قسمت سرور مشکلد داشتیم
+
+#before
+this.#app.use((req, res, next)🔴error
+
+#after
+this.#app.use((error, req, res, next)🟢fixed

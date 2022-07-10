@@ -23,9 +23,9 @@ class AuthController {
       const {username, password} = req.body;
       console.log(req.headers);
       const user = await UserModel.findOne({username});
-      if(!user) return res.status(401).json({status: 401, message:'نام کاربری یا رمز عبور اشتباه میباشد'});
+      if(!user) throw {status: 401, message:'نام کاربری یا رمز عبور اشتباه میباشد'};
       const compareResualt = bcrypt.compareSync(password, user.password)
-      if(!compareResualt) return res.status(401).json({status:401, message:"نام کاربری یا رمز عبور اشتباه میباشد"});
+      if(!compareResualt) throw {status:401, message:"نام کاربری یا رمز عبور اشتباه میباشد"};
       const token = tokenGenerator({username});
       user.token = token;
       await user.save()
