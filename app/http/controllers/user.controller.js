@@ -41,6 +41,21 @@ class UserController {
             next(error)
         }
     }
+
+    async uploadProfileImage(req, res, next){
+        try {
+            const userID = req.user._id
+            const filePath = req.file.path.substring(7);
+            const result = await UserModel.updateOne({_id:userID}, {$set : {profile_image: filePath}});
+            if(result.matchedCount == 0)  throw {status:400, message:'بروز رسانی انجام نشد'};
+            return res.status(200).json({
+                status:200,
+                success:true,
+                message:'بروز رسانی انجام شد'});
+        } catch (error) {
+            next(error)
+        }
+    }
     addSkills(){
 
     }
