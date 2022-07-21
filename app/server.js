@@ -3,6 +3,7 @@ const { AllRoutes } = require('./router/router');
 module.exports = class Application {
     #express = require('express');
     #app = this.#express()
+    #cors = require('cors')
     constructor(PORT, DB_URL){
         this.configDatabase(DB_URL)
         this.configApplication()
@@ -15,6 +16,7 @@ module.exports = class Application {
         this.#app.use(this.#express.static(path.join(__dirname, "..", "public")))
         this.#app.use(this.#express.json());
         this.#app.use(this.#express.urlencoded({extended:true}))
+        this.#app.use(this.#cors())
     }
 
     createServer(PORT){

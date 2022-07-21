@@ -13,7 +13,11 @@ class AuthController {
             mobile,
             password:hash_password
         })
-        return res.json(user)
+        return res.status(201).json({
+          status:201,
+          success:true,
+          message:'با موفقیت ثبت شد'
+        })
     } catch (error) {
         next(error)
     }
