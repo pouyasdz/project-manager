@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt')
 class AuthController {
   async register(req, res, next) {
     try {
-        const {username, password, email, mobile} = req.body;
+        let {username, password, email, mobile} = req.body;
+        username = username.toLowerCase()
         const hash_password = hashSrting(password);
 
         const user = await UserModel.create({
@@ -25,7 +26,6 @@ class AuthController {
   async login(req, res, next) {
     try {
       const {username, password} = req.body;
-      console.log(req.headers);
       const user = await UserModel.findOne({username});
       if(!user) throw {status: 401, message:'نام کاربری یا رمز عبور اشتباه میباشد'};
       const compareResualt = bcrypt.compareSync(password, user.password)
