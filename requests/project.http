@@ -1,0 +1,20 @@
+
+###create project
+Post http://localhost:8000/project/create
+Authorization: Bearer {{$dotenv token}}
+Content-Type: "application/json"
+
+###list
+Get http://localhost:8000/project/list
+Authorization: Bearer {{$dotenv token}}
+Content-Type: "application/json"
+
+###get project by id
+Get http://localhost:8000/project/
+Authorization: Bearer {{$dotenv token}}
+Content-Type: "application/json"
+
+###remove project
+Delete http://localhost:8000/project/
+Authorization: Bearer {{$dotenv token}}
+Content-Type: "application/json"

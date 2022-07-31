@@ -1,6 +1,12 @@
+const autoBind = require("auto-bind");
 const { ProjectModel } = require("../../models/project");
 
 class ProjectController {
+
+  constructor(){
+    autoBind(this)
+  }
+
   async creatProject(req, res, next) {
     try {
       const owner = req.user._id;
@@ -36,11 +42,16 @@ class ProjectController {
     }
   }
   async findProject(projectID, owner){
-    const project = await ProjectModel.findOne({ owner, _id: projectID });
-    if (!project) throw { status: 404, message: "پروژه یافت نشد" };
-    return project
+    try {
+      const project = await ProjectModel.findOne({ owner, _id: projectID });
+      if (!project) throw { status: 404, message: "پروژه یافت نشد" };
+      return project
+      
+    } catch (error) {
+      console.log("error");
+    }
   }
-  async getProjectById(req, res, next) {
+async getProjectById(req, res, next) {
     try {
       const owner = req.user._id;
       const projectID = req.params.id;
