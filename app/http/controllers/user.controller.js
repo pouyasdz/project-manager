@@ -57,8 +57,20 @@ class UserController {
             next(error)
         }
     }
-    addSkills(){
-
+    async addSkills(req, res, next){
+        try {
+            const userID = req.user._id;
+            const skills = req.body.skills;
+            const resualt = await UserModel.updateOne({_id:userID}, {$set : {skills}});
+            if(resualt.modifiedCount == 0) throw {status:400, message:"بروزرسانی انجام نشد"};
+            return res.status(200).json({
+                status:200,
+                success:true,
+                message:"بروز رسانی انجام شد"
+            })
+        } catch (error) {
+            next(error)
+        }
     }
     editSkills(){
 

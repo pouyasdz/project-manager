@@ -15,6 +15,7 @@ router.post(
   checkLogin,
   UserController.uploadProfileImage
 );
+router.post("/profile/skills", checkLogin, UserController.addSkills);
 
 module.exports = {
   userRoutes: router,
