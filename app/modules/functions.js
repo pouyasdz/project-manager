@@ -30,9 +30,14 @@ function tokenJwtVerify(token){
     return result
 }
 
+function createLinkForFiles(fileAddress, req){
+    return req.protocol + "://" + req.get("host")+ "/" + (fileAddress.replace(/[\\\\]/gm, "/"));
+}
+
 module.exports = {
     hashSrting,
     tokenGenerator,
     tokenJwtVerify,
-    createUploadPathDir
+    createUploadPathDir,
+    createLinkForFiles,
 }

@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const { ProjectModel } = require("../../models/project");
+const { createLinkForFiles } = require("../../modules/functions");
 
 class ProjectController {
   constructor() {
@@ -31,6 +32,9 @@ class ProjectController {
     try {
       const owner = req.user._id;
       const projects = await ProjectModel.find({ owner });
+      for(const project of projects){
+        project.image = createLinkForFiles(project.image, req)
+      }
       return res.status(200).json({
         status: 200,
         success: true,
@@ -54,6 +58,8 @@ class ProjectController {
       const owner = req.user._id;
       const projectID = req.params.id;
       const project = await this.findProject(projectID, owner);
+      project.image = createLinkForFiles(project.image, req)
+
       return res.status(200).json({
         status: 200,
         success: true,
@@ -106,6 +112,26 @@ class ProjectController {
         success:true,
         message:"بروزرسانی انجام شد"
       })
+    } catch (error) {
+      next(error)
+    }
+  }
+  async updateProjectImage(req, res, next){
+    try {
+      const {image} = req.body;
+      const owner = req.user._id;
+      const projectID = req.params.id;
+
+      await this.findProject(projectID, owner);
+      const updateResult =  await ProjectModel.updateOne({_id:projectID}, {$set : {image}});
+
+      if(updateResult.modifiedCount == 0) throw {status:400, message: "بروزرسانی انجام نشد"};
+
+      return res.status(200).json({
+        status:200,
+        success:true,
+        message:"بروزرسانی انجام شد"
+      });
     } catch (error) {
       next(error)
     }

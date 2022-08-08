@@ -21,6 +21,7 @@ router.get("/list", checkLogin,ProjectController.getAllProject)
 router.get("/:id", checkLogin ,mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById)
 router.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject)
 router.post("/edit/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.updateProject)
+router.post("/edit-project-image/:id", fileUpload(), checkLogin, uploadFile,mongoIDValidator(), expressValidatorMapper, ProjectController.updateProjectImage)
 
 module.exports = {
   projectRoutes: router,
