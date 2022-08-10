@@ -33,6 +33,57 @@ class TeamController{
             next(error)
         }
     }
+
+    async getTeamByID(req, res, next){
+        try {
+            const teamID = req.params.id;
+            const team = await TeamModel.findById(teamID);
+            if(!team) throw {status:404, message:"شناسه نامعتبر"};
+            return res.status(200).json({
+                status:200,
+                success:true,
+                team
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getMyTeams(req, res, next){
+        try {
+            const userID = req.user._id
+            const teams = await TeamModel.find({
+                $or :[
+                    {owner : userID},
+                    {users: userID}
+                ]
+            })
+            return res.status(200).json({
+                status:200,
+                success:true,
+                teams
+            })
+        } catch (error) {
+            
+        }
+    }
+
+    async removeTeamByID(req, res, next){
+        try {
+            const teamID = req.params.id;
+            const teams = await TeamModel.findById(teamID);
+            if(!teams) throw {status:404, message:"شناسه نامعتبر"};
+            const result = await TeamModel.deleteOne({_id:teamID});
+            if(result.deletedCount == 0) throw {status: 500, message:"حذف انجام نشد دوباره تلاش کنید"}
+            return res.status(200).json({
+                status:200,
+                success:true,
+                teams
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async inviteUserToTeam(){
 
     }
