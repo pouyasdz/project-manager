@@ -5,7 +5,6 @@ class AuthController {
   async register(req, res, next) {
     try {
         let {username, password, email, mobile} = req.body;
-        username = username.toLowerCase()
         const hash_password = hashSrting(password);
 
         const user = await UserModel.create({
