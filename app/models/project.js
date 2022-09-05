@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const ProjectSchema = new mongoose.Schema({
     title : {type : String, required : true},
+    preView:{type: String},
     text : {type : String},
     image : {type :String, default:'/defaults/default.png'},
     tags : {type :[mongoose.Types.ObjectId], default:[]},

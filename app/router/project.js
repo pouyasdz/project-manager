@@ -11,13 +11,13 @@ router.post(
   "/create",
   fileUpload(),
   checkLogin,
-  uploadFile,
   createProjectValidator(),
+  uploadFile,
   expressValidatorMapper,
   ProjectController.creatProject
 );
 
-router.get("/list", checkLogin,ProjectController.getAllProject)
+router.get("/list/:page", checkLogin,ProjectController.getAllProject)
 router.get("/:id", checkLogin ,mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById)
 router.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject)
 router.post("/edit/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.updateProject)

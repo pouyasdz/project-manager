@@ -1,8 +1,10 @@
 const path = require('path');
 const { createUploadPathDir } = require('./functions');
 const uploadFile = async (req, res, next) => {
+    // console.log(req);
     try {
-        if(Object.keys(req.files).length == 0) throw {status:400, message:"تصویر شاخص پروژه را ارسال کنید"}
+        if(!req.files) throw {status:400, message:" عکس پروژه وارد نشده "}
+        if(req.file || Object.keys(req.files).length == 0) throw {status:400, message:"تصویر شاخص پروژه را ارسال کنید"}
         let image = req.files.image;
         let type = path.extname(image.name);
         const trueType = [".png", ".jpg", ".webp", ".gif"];

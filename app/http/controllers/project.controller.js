@@ -10,17 +10,23 @@ class ProjectController {
   async creatProject(req, res, next) {
     try {
       const owner = req.user._id;
-      const { title, text, image, tags } = req.body;
+      let { title, text, image, tags, display} = req.body;
+      
+      const prev = text.replace(/(?:\r|\n|\r\n)/g," ")
+      text=text.replace(/(?:\r|\n|\r\n)/g, '<br>');
+
       const result = await ProjectModel.create({
         title,
         text,
         owner,
         image,
         tags,
+        preView:prev,
+        private:display
       });
       if (!result) throw { status: 400, message: "افزودن پروژه انجام نشد" };
       return res.status(201).json({
-        status: 201,
+        status: 201, 
         success: true,
         message: "پروژه با موفقیت ایجاد شد",
       });
@@ -30,15 +36,23 @@ class ProjectController {
   }
   async getAllProject(req, res, next) {
     try {
+      let pageNumber = req.params.page;
+      let pageSize = 5;
       const owner = req.user._id;
-      const projects = await ProjectModel.find({ owner });
+      const countProject = await (ProjectModel.find({ owner }));
+      const projects = await ProjectModel.find({ owner })
+      .sort({createdAt: - 1})
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize);
+      
       for(const project of projects){
         project.image = createLinkForFiles(project.image, req)
       }
       return res.status(200).json({
         status: 200,
         success: true,
-        projects,
+        pagination:Math.ceil(countProject.length / pageSize),
+        projects ,
       });
     } catch (error) {
       next(error);

@@ -31,7 +31,9 @@ function tokenJwtVerify(token){
 }
 
 function createLinkForFiles(fileAddress, req){
-    return req.protocol + "://" + req.get("host")+ "/" + (fileAddress.replace(/[\\\\]/gm, "/"));
+    const file_Address = fileAddress?.replace(/[\\\\]/gm, "/")
+    if(!file_Address) return
+    return req.protocol + "://" + req.get("host")+ "/" + file_Address;
 }
 
 module.exports = {
