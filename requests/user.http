@@ -2,12 +2,9 @@ Get http://localhost:3000/user/profile HTTP/1.1
 Content-Type: application/json
 authorization: Bearer {{$dotenv TOKEN}}
 ###
-Post http://localhost:3000/user/profile HTTP/1.1
-# Content-Type: application/json
-authorization: Bearer {{$dotenv TOKEN}}
 
-{
-    "first_name":"lp",
-    "last_name":"po",
-    "skills":["programing", "node.js", "express.js"],
-}
+# {
+#     "first_name":"lp",
+#     "last_name":"po",
+#     "skills":["programing", "node.js", "express.js"],
+# }

@@ -1,6 +1,10 @@
+const autoBind = require("auto-bind");
 const { UserModel } = require("../../models/user");
 const { TeamModel } = require("./../../models/team");
 class TeamController {
+  constructor(){
+    autoBind(this)
+  }
   async createTeam(req, res, next) {
     try {
       const { name, description, username } = req.body;
@@ -53,9 +57,33 @@ class TeamController {
   async getMyTeams(req, res, next) {
     try {
       const userID = req.user._id;
-      const teams = await TeamModel.find({
-        $or: [{ owner: userID }, { users: userID }],
-      });
+      const teams = await TeamModel.aggregate([
+        {
+        $match:{
+            $or: [{ owner: userID }, { users: userID }],
+        },
+      },
+      {
+        $lookup:{
+          from :"users",
+          localField:"owner",
+          foreignField:"_id",
+          as:"owner"
+        }
+      },
+      {
+        $project:{
+         "owner.username":1,
+         "owner.mobile":1,
+         "owner.email":1
+        }
+      },
+      {
+        $unwind :"$owner"
+      }
+      
+        
+      ]);
       return res.status(200).json({
         status: 200,
         success: true,
@@ -124,9 +152,43 @@ class TeamController {
       next(error);
     }
   }
-  async updateTeam() {}
-  async removeUserFromTeam() {}
+  async updateTeam(req, res, next) {
+    try {
+      const data = {...req.body};
+      Object.keys(data).forEach(key => {
+        if(!data[key]) delete[key];
+        if(["", " ", undefined, null, NaN].includes(data[key])) delete[key];
+      })
+      const userID = req.user._id;
+      const {teamID} = req.params;
+      const team = await TeamModel.findOne({owner:userID, _id:teamID})
+
+      if(!team) throw {status:404, message:"تیمی با این  مشخصات وجود ندارد"}
+      const teamEditResult = await TeamModel.updateOne({_id:teamID},{
+        $set: data
+      })
+
+      if(teamEditResult.modifiedCount == 0)throw {status:500, message:"بروزرسانی انجام نشد"}
+
+      return res.status(200).json({
+        status:200,
+        success:true,
+        message:"بروزرسانی با موفقیت انجام شد"
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+  async removeUserFromTeam(req, res, next) {
+    try {
+      
+    } catch (error) {
+      next(error)
+    }
+  }
+ 
 }
+
 
 module.exports = {
   TeamController: new TeamController(),

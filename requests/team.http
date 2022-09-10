@@ -1,0 +1,13 @@
+POST  http://localhost:8000/team/create HTTP/1.1
+Content-Type: application/json
+authorization: Bearer {{$dotenv TOKEN}}
+
+{
+    "name":"first_team",
+    "description":"description",
+    "username":"MMAAr"
+}
+###
+Get http://localhost:8000/team/me HTTP/1.1
+Content-Type: application/json
+authorization: Bearer {{$dotenv TOKEN}}

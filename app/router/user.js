@@ -17,6 +17,8 @@ router.post(
 );
 router.post("/profile/skills", checkLogin, UserController.addSkills);
 router.get("/requests",checkLogin, UserController.getAllRequest)
+router.get("/requests/:status", checkLogin, UserController.getRequestsByStatus)
+router.get("/change-status-request/:id/:status", checkLogin, UserController.acceptInviteInTeam)
 module.exports = {
   userRoutes: router,
 };
