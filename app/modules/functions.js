@@ -25,9 +25,13 @@ function tokenGenerator(payload){
 }
 
 function tokenJwtVerify(token){
-    const result = jwt.verify(token, process.env.SECRET_KEY);
-    if(!result?.username) throw {status:401, message:'لطفا وارد حساب کاربری خود شوید'}
-    return result
+    try {
+        const result = jwt.verify(token, process.env.SECRET_KEY);
+        if(!result?.username) throw {status:401, message:'لطفا وارد حساب کاربری خود شوید'}
+        return result
+    } catch (error) {
+        throw {status:401, message:'لطفا وارد حساب کاربری خود شوید'}
+    }
 }
 
 function createLinkForFiles(fileAddress, req){
